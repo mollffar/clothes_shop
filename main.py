@@ -1,31 +1,27 @@
-import os
 import logging
 import json
+import asyncio
 from aiogram import Bot, Dispatcher
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo, ContentType
 from aiogram.filters import CommandStart
-from dotenv import load_dotenv
 
-load_dotenv()
-BOT_TOKEN = os.getenv("6929574520:AAF8eIEjZ_a2uojRsmi5rsZUgyje2J-2c54")
-ADMIN_CHAT_ID = os.getenv("6205469928")  # set your Telegram ID or admin chat id
+# === Налаштування бота ===
+BOT_TOKEN = "6929574520:AAF8eIEjZ_a2uojRsmi5rsZUgyje2J-2c54"
+ADMIN_CHAT_ID = "6205469928"   # наприклад, 6205469928
 
-if not BOT_TOKEN:
-    raise SystemExit("Set BOT_TOKEN environment variable")
-if not ADMIN_CHAT_ID:
-    raise SystemExit("Set ADMIN_CHAT_ID environment variable")
-
-# Replace this with the URL where you host the web/index.html
-WEB_APP_URL = os.getenv("WEB_APP_URL", "https://example.com/web/index.html")
+# URL сторінки магазину (потрібно замінити на свій хостинг)
+WEB_APP_URL = "https://example.com/web/index.html"
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
+# Кнопка відкриття магазину
 shop_keyboard = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="🛍 Відкрити магазин", web_app=WebAppInfo(url=WEB_APP_URL))]
 ])
 
+# ✅ Команда /start
 @dp.message(CommandStart())
 async def cmd_start(message: Message):
     await message.answer(
@@ -34,20 +30,22 @@ async def cmd_start(message: Message):
         reply_markup=shop_keyboard
     )
 
+# ✅ Обробка даних з WebApp
 @dp.message(content_types=[ContentType.WEB_APP_DATA])
 async def handle_webapp_data(message: Message):
-    # message.web_app_data.data contains the JSON string sent from WebApp
     try:
         data_str = message.web_app_data.data
         data = json.loads(data_str)
-    except Exception as e:
-        await message.answer("Помилка при отриманні даних з WebApp.")
+    except Exception:
+        await message.answer("❌ Помилка при отриманні даних з WebApp.")
         logging.exception("Invalid web_app_data")
         return
 
-    # Format order for admin
+    # Підрахунок суми
     total = sum(item.get('price', 0) * item.get('qty', 1) for item in data.get('cart', []))
     items_text = "\n".join([f"- {it.get('name')} x{it.get('qty', 1)} — {it.get('price')} грн" for it in data.get('cart', [])])
+
+    # Формування повідомлення
     order_text = (
         f"🆕 Нове замовлення\n"
         f"Ім'я: {data.get('name')}\n"
@@ -56,13 +54,17 @@ async def handle_webapp_data(message: Message):
         f"Коментар: {data.get('comment')}\n"
         f"\n🧾 Товари:\n{items_text}\n"
         f"\n💰 Сума: {total} грн\n"
-        f"From user: @{message.from_user.username or message.from_user.id}"
+        f"Від користувача: @{message.from_user.username or message.from_user.id}"
     )
-    # Send confirmation to the user
+
+    # Відповідь користувачу
     await message.answer("✅ Дякуємо! Ми отримали ваше замовлення та зв'яжемося з вами.")
-    # Forward order to admin
+    # Надсилання адміну
     await bot.send_message(int(ADMIN_CHAT_ID), order_text)
 
-if __name__ == '__main__':
-    import asyncio
-    asyncio.run(dp.start_polling(bot))
+# === Запуск бота ===
+async def main():
+    await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    asyncio.run(main())
