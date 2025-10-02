@@ -7,7 +7,7 @@ from aiogram.filters import CommandStart
 from dotenv import load_dotenv
 
 load_dotenv()
-BOT_TOKEN = os.getenv("8269221122:AAEKhMgVz4z3kvW-PO7v6TzGK4J3J9nw8xA")
+BOT_TOKEN = os.getenv("6929574520:AAF8eIEjZ_a2uojRsmi5rsZUgyje2J-2c54")
 ADMIN_CHAT_ID = os.getenv("6205469928")  # set your Telegram ID or admin chat id
 
 if not BOT_TOKEN:
