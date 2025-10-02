@@ -1,0 +1,13 @@
+body{font-family:Arial,Helvetica,sans-serif;margin:0;padding:10px;background:#f5f5f5}
+header{background:#1e88e5;color:white;padding:12px;border-radius:8px}
+h1{margin:0;font-size:18px}
+#catalog{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.card{background:white;padding:10px;border-radius:8px;width:160px;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+.card button{margin-top:8px;padding:6px 8px;border:0;border-radius:6px;cursor:pointer}
+#cart-section{margin-top:12px}
+.modal{position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center}
+.hidden{display:none}
+.modal-content{background:white;padding:14px;border-radius:8px;width:90%;max-width:400px}
+label{display:block;margin:8px 0}
+input{width:100%;padding:8px;border-radius:6px;border:1px solid #ccc}
+button{background:#1e88e5;color:white;border:none;padding:10px;border-radius:8px}

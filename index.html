@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Магазин одягу</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <header>
+    <h1>🛍 Магазин одягу</h1>
+  </header>
+  <main>
+    <section id="catalog"></section>
+    <hr>
+    <section id="cart-section">
+      <h2>Корзина</h2>
+      <div id="cart"></div>
+      <div id="total"></div>
+      <button id="checkoutBtn">Оформити замовлення</button>
+    </section>
+  </main>
+
+  <!-- Modal for checkout -->
+  <div id="checkoutModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Оформлення замовлення</h3>
+      <label>Ім'я:<input id="name"></label>
+      <label>Телефон:<input id="phone" placeholder="+380..."></label>
+      <label>Адреса:<input id="address"></label>
+      <label>Коментар:<input id="comment"></label>
+      <button id="sendOrder">Надіслати замовлення</button>
+      <button id="closeModal">Закрити</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
